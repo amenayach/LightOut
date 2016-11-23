@@ -28,11 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.trBrightness = new System.Windows.Forms.TrackBar();
             this.lblBrightness = new System.Windows.Forms.Label();
             this.lblShortcut = new System.Windows.Forms.Label();
             this.lblShortcutKey = new System.Windows.Forms.Label();
             this.chRunWithWindows = new System.Windows.Forms.CheckBox();
+            this.ntfLightOut = new System.Windows.Forms.NotifyIcon(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.trBrightness)).BeginInit();
             this.SuspendLayout();
             // 
@@ -86,6 +88,13 @@
             this.chRunWithWindows.UseVisualStyleBackColor = true;
             this.chRunWithWindows.CheckedChanged += new System.EventHandler(this.chRunWithWindows_CheckedChanged);
             // 
+            // ntfLightOut
+            // 
+            this.ntfLightOut.Text = "LightOut";
+            this.ntfLightOut.Visible = true;
+            this.ntfLightOut.Icon = Properties.Resources.brightness;
+            this.ntfLightOut.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ntfLightOut_MouseDoubleClick);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -103,7 +112,6 @@
             this.Text = "Lighout";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
             ((System.ComponentModel.ISupportInitialize)(this.trBrightness)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -117,6 +125,7 @@
         private System.Windows.Forms.Label lblShortcut;
         private System.Windows.Forms.Label lblShortcutKey;
         private System.Windows.Forms.CheckBox chRunWithWindows;
+        private System.Windows.Forms.NotifyIcon ntfLightOut;
     }
 }
 

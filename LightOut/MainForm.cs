@@ -14,9 +14,9 @@ namespace LightOut
     public partial class MainForm : Form
     {
 
-        private const int LIGHTJUMP = 3;
+        private const int LIGHTJUMP = 5;
 
-        private Timer _timer = new Timer() { Interval = 30, Enabled = false };
+        private Timer _timer = new Timer() { Interval = 100, Enabled = false };
 
         public MainForm()
         {
@@ -83,6 +83,10 @@ namespace LightOut
 
             }
 
+            if (this.Visible && this.WindowState == FormWindowState.Minimized)
+            {
+                this.Visible = false;
+            }
         }
 
         private void TrBrightness_ValueChanged(object sender, EventArgs e)
@@ -99,18 +103,19 @@ namespace LightOut
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            ntfLightOut.Visible = false;
             _timer.Stop();
             _timer.Dispose();
-        }
-
-        private void MainForm_KeyDown(object sender, KeyEventArgs e)
-        {
-            this.Text = e.KeyCode.ToString();
         }
 
         private void chRunWithWindows_CheckedChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void ntfLightOut_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            this.Visible = !this.Visible;
         }
     }
 }
