@@ -15,6 +15,7 @@ namespace LightOut
     {
 
         private const int LIGHTJUMP = 3;
+
         private Timer _timer = new Timer() { Interval = 30, Enabled = false };
 
         public MainForm()
