@@ -35,7 +35,11 @@
             this.lblShortcutKey = new System.Windows.Forms.Label();
             this.chRunWithWindows = new System.Windows.Forms.CheckBox();
             this.ntfLightOut = new System.Windows.Forms.NotifyIcon(this.components);
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnHide = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.trBrightness)).BeginInit();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // trBrightness
@@ -72,15 +76,15 @@
             this.lblShortcutKey.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblShortcutKey.Location = new System.Drawing.Point(65, 88);
             this.lblShortcutKey.Name = "lblShortcutKey";
-            this.lblShortcutKey.Size = new System.Drawing.Size(163, 28);
+            this.lblShortcutKey.Size = new System.Drawing.Size(115, 28);
             this.lblShortcutKey.TabIndex = 3;
-            this.lblShortcutKey.Text = "Ctrl + B + < + | - >";
+            this.lblShortcutKey.Text = "Ctrl + Alt + < + | - >";
             this.lblShortcutKey.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // chRunWithWindows
             // 
             this.chRunWithWindows.AutoSize = true;
-            this.chRunWithWindows.Location = new System.Drawing.Point(234, 95);
+            this.chRunWithWindows.Location = new System.Drawing.Point(186, 95);
             this.chRunWithWindows.Name = "chRunWithWindows";
             this.chRunWithWindows.Size = new System.Drawing.Size(118, 17);
             this.chRunWithWindows.TabIndex = 4;
@@ -90,16 +94,42 @@
             // 
             // ntfLightOut
             // 
+            this.ntfLightOut.ContextMenuStrip = this.contextMenuStrip1;
+            this.ntfLightOut.Icon = global::LightOut.Properties.Resources.brightness;
             this.ntfLightOut.Text = "LightOut";
             this.ntfLightOut.Visible = true;
-            this.ntfLightOut.Icon = Properties.Resources.brightness;
-            this.ntfLightOut.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ntfLightOut_MouseDoubleClick);
+            this.ntfLightOut.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ntfLightOut_MouseClick);
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.exitToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(93, 26);
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(92, 22);
+            this.exitToolStripMenuItem.Text = "E&xit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            // 
+            // btnHide
+            // 
+            this.btnHide.Location = new System.Drawing.Point(332, 91);
+            this.btnHide.Name = "btnHide";
+            this.btnHide.Size = new System.Drawing.Size(65, 23);
+            this.btnHide.TabIndex = 6;
+            this.btnHide.Text = "&Hide";
+            this.btnHide.UseVisualStyleBackColor = true;
+            this.btnHide.Click += new System.EventHandler(this.btnHide_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(418, 133);
+            this.Controls.Add(this.btnHide);
             this.Controls.Add(this.chRunWithWindows);
             this.Controls.Add(this.lblShortcutKey);
             this.Controls.Add(this.lblShortcut);
@@ -113,6 +143,7 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.trBrightness)).EndInit();
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -126,6 +157,9 @@
         private System.Windows.Forms.Label lblShortcutKey;
         private System.Windows.Forms.CheckBox chRunWithWindows;
         private System.Windows.Forms.NotifyIcon ntfLightOut;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
+        private System.Windows.Forms.Button btnHide;
     }
 }
 

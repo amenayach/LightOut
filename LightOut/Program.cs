@@ -14,9 +14,20 @@ namespace LightOut
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+            bool result;
+            var mutex = new System.Threading.Mutex(true, "UniqueAppId", out result);
+
+            if (result)
+            {
+
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new MainForm());
+                GC.KeepAlive(mutex);
+
+            }
+
+
         }
     }
 }

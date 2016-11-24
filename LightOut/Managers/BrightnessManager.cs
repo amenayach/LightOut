@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Management;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace LightOut.Managers
@@ -10,25 +11,34 @@ namespace LightOut.Managers
     public class BrightnessManager
     {
 
-        public static void SetBrightness(byte targetBrightness)
+        private static object _lock = new object();
+
+        public void SetBrightness(byte targetBrightness)
         {
-            ManagementScope scope = new ManagementScope("root\\WMI");
-            SelectQuery query = new SelectQuery("WmiMonitorBrightnessMethods");
-            using (ManagementObjectSearcher searcher = new ManagementObjectSearcher(scope, query))
+
+            new Thread(() =>
             {
-                using (ManagementObjectCollection objectCollection = searcher.Get())
+
+                ManagementScope scope = new ManagementScope("root\\WMI");
+                SelectQuery query = new SelectQuery("WmiMonitorBrightnessMethods");
+                using (ManagementObjectSearcher searcher = new ManagementObjectSearcher(scope, query))
                 {
-                    foreach (ManagementObject mObj in objectCollection)
+                    using (ManagementObjectCollection objectCollection = searcher.Get())
                     {
-                        mObj.InvokeMethod("WmiSetBrightness",
-                            new Object[] { UInt32.MaxValue, targetBrightness });
-                        break;
+                        foreach (ManagementObject mObj in objectCollection)
+                        {
+                            mObj.InvokeMethod("WmiSetBrightness",
+                                new Object[] { UInt32.MaxValue, targetBrightness });
+                            break;
+                        }
                     }
                 }
-            }
+
+            }).Start();
+            
         }
 
-        public static byte GetBrightness()
+        public byte GetBrightness()
         {
             ManagementScope scope = new ManagementScope("root\\WMI");
             SelectQuery query = new SelectQuery("WmiMonitorBrightness");

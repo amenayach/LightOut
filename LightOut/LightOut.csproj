@@ -58,6 +58,7 @@
     </Compile>
     <Compile Include="Managers\BrightnessManager.cs" />
     <Compile Include="Managers\HotKeyManager.cs" />
+    <Compile Include="Managers\KeyInterceptor.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="MainForm.resx">

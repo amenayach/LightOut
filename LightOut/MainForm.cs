@@ -14,15 +14,52 @@ namespace LightOut
     public partial class MainForm : Form
     {
 
+        private bool _lock = false;
+
+        private BrightnessManager _brightnessManager;
+
+        private KeyInterceptor _interceptor;
+
         private const int LIGHTJUMP = 5;
-
-        private Timer _timer = new Timer() { Interval = 100, Enabled = false };
-
+        
         public MainForm()
         {
             InitializeComponent();
+
+            _brightnessManager = new BrightnessManager();
+
+            _interceptor = new KeyInterceptor();
+            _interceptor.KeyCaptured += _interceptor_KeyCaptured;
+            _interceptor.Hook(this);
+
         }
 
+        private void _interceptor_KeyCaptured(object sender, Keys keyCode)
+        {
+            if (ModifierKeys.HasFlag(Keys.Control) && ModifierKeys.HasFlag(Keys.Alt))
+            {
+                if (keyCode == Keys.Oemplus || keyCode == Keys.Add)
+                {
+
+                    if (trBrightness.Value < 100)
+                    {
+                        trBrightness.Value += trBrightness.Value + LIGHTJUMP > 100 ? 100 - trBrightness.Value : LIGHTJUMP;
+                    }
+
+                }
+                else if (keyCode == Keys.OemMinus || keyCode == Keys.Subtract)
+                {
+
+                    if (trBrightness.Value > 0)
+                    {
+                        trBrightness.Value -= trBrightness.Value - LIGHTJUMP < 0 ? 0 : LIGHTJUMP;
+                    }
+
+                }
+
+            }
+        }
+        
         private void MainForm_Load(object sender, EventArgs e)
         {
             try
@@ -31,12 +68,9 @@ namespace LightOut
                 chRunWithWindows.Checked = HotKeyManager.IsAppInWinStartup();
                 chRunWithWindows.CheckedChanged += ChRunWithWindows_CheckedChanged;
 
-                trBrightness.Value = (int)BrightnessManager.GetBrightness();
+                trBrightness.Value = (int)_brightnessManager.GetBrightness();
                 trBrightness.ValueChanged += TrBrightness_ValueChanged;
-
-                _timer.Tick += _timer_Tick;
-                _timer.Start();
-
+                
             }
             catch (Exception ex)
             {
@@ -56,56 +90,36 @@ namespace LightOut
             }
         }
 
-        private void _timer_Tick(object sender, EventArgs e)
-        {
-            if (
-                    ModifierKeys.HasFlag(Keys.Control) &&
-                    (HotKeyManager.GetAsyncKeyState(Keys.B) == -32767 || HotKeyManager.GetAsyncKeyState(Keys.B) == 32768)
-                )
-            {
-
-                if (HotKeyManager.GetAsyncKeyState(Keys.Oemplus) == -32767 || HotKeyManager.GetAsyncKeyState(Keys.Oemplus) == 32768 ||
-                    HotKeyManager.GetAsyncKeyState(Keys.Add) == -32767 || HotKeyManager.GetAsyncKeyState(Keys.Add) == 32768)
-                {
-                    if (trBrightness.Value < 100)
-                    {
-                        trBrightness.Value += trBrightness.Value + LIGHTJUMP > 100 ? 100 - trBrightness.Value : LIGHTJUMP;
-                    }
-                }
-                else if (HotKeyManager.GetAsyncKeyState(Keys.OemMinus) == -32767 || HotKeyManager.GetAsyncKeyState(Keys.OemMinus) == 32768 ||
-                    HotKeyManager.GetAsyncKeyState(Keys.Subtract) == -32767 || HotKeyManager.GetAsyncKeyState(Keys.Subtract) == 32768)
-                {
-                    if (trBrightness.Value > 0)
-                    {
-                        trBrightness.Value -= trBrightness.Value - LIGHTJUMP < 0 ? 0 : LIGHTJUMP;
-                    }
-                }
-
-            }
-
-            if (this.Visible && this.WindowState == FormWindowState.Minimized)
-            {
-                this.Visible = false;
-            }
-        }
-
         private void TrBrightness_ValueChanged(object sender, EventArgs e)
         {
             try
             {
-                BrightnessManager.SetBrightness((byte)trBrightness.Value);
+
+                if (!_lock)
+                {
+
+                    _lock = true;
+
+                    _brightnessManager.SetBrightness((byte)trBrightness.Value);
+
+                    _lock = false;
+
+                }
+
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                _lock = false;
             }
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             ntfLightOut.Visible = false;
-            _timer.Stop();
-            _timer.Dispose();
         }
 
         private void chRunWithWindows_CheckedChanged(object sender, EventArgs e)
@@ -113,9 +127,25 @@ namespace LightOut
 
         }
 
-        private void ntfLightOut_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.Visible = !this.Visible;
+            Close();
+        }
+
+        private void ntfLightOut_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+
+                WindowState = FormWindowState.Normal;
+                Visible = !Visible;
+
+            }
+        }
+
+        private void btnHide_Click(object sender, EventArgs e)
+        {
+            Hide();
         }
     }
 }
